@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ultra Stylish Fonts + Paragraph Auto Detect</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --glow: rgba(140, 100, 255, .35);
+      --glow2: rgba(0, 220, 255, .25);
+      --radius: 18px;
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(140,100,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 85% 20%, rgba(0,220,255,.12), transparent 55%),
+        radial-gradient(900px 700px at 35% 90%, rgba(255,80,180,.08), transparent 55%),
+        linear-gradient(180deg, #05060B, #070A12 40%, #05060B);
+      min-height:100vh;
+    }
+    .wrap{max-width: 1180px;margin: 0 auto;padding: 28px 16px 40px;}
+    .header{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom: 18px;}
+    .brand{display:flex;flex-direction:column;gap:6px;}
+    .title{font-size: 22px;font-weight: 900;letter-spacing: .2px;line-height: 1.15;}
+    .subtitle{color: var(--muted);font-size: 13px;line-height: 1.45;max-width: 70ch;}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;}
+    .pill{padding: 8px 12px;border: 1px solid var(--stroke);border-radius: 999px;background: rgba(255,255,255,.05);backdrop-filter: blur(10px);box-shadow: 0 10px 30px rgba(0,0,0,.25);color: var(--muted);font-size: 12px;user-select:none;}
+    .grid{display:grid;grid-template-columns: 1.08fr .92fr;gap: 16px;align-items:start;}
+    @media (max-width: 980px){.grid{grid-template-columns: 1fr}}
+    .card{background: var(--panel);border: 1px solid var(--stroke);border-radius: var(--radius);box-shadow: var(--shadow);overflow:hidden;position:relative;}
+    .card::before{
+      content:"";position:absolute; inset:-1px;
+      background: radial-gradient(520px 170px at 20% 0%, rgba(140,100,255,.20), transparent 60%),
+                  radial-gradient(520px 170px at 80% 0%, rgba(0,220,255,.16), transparent 60%);
+      pointer-events:none;opacity:.75;
+    }
+    .card > *{position:relative}
+    .cardhead{padding: 16px 16px 0;display:flex;gap: 12px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+    .cardtitle{font-size: 14px;font-weight: 800;letter-spacing: .25px;color: rgba(255,255,255,.88);display:flex;gap:10px;align-items:center;}
+    .dot{width:10px;height:10px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2) 35%, rgba(140,100,255,1) 60%, rgba(0,220,255,1));
+      box-shadow: 0 0 24px var(--glow), 0 0 30px var(--glow2);
+      flex:0 0 auto;
+    }
+    .controls{padding: 14px 16px 16px;display:grid;gap: 12px;}
+    .row{display:grid;grid-template-columns: 1fr;gap: 10px;}
+    .twocol{display:grid;grid-template-columns: 1fr 1fr;gap: 10px;}
+    @media (max-width: 540px){.twocol{grid-template-columns: 1fr}}
+    label{font-size: 12px;color: var(--muted);display:flex;justify-content:space-between;gap: 10px;align-items:center;}
+    .input,.ta{
+      width:100%;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 12px;
+      outline:none;
+      transition: .18s ease;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .ta{min-height: 140px; resize: vertical; line-height: 1.5;}
+    .input:focus,.ta:focus{
+      border-color: rgba(140,100,255,.55);
+      box-shadow: 0 0 0 4px rgba(140,100,255,.18);
+    }
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-start;}
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .16s ease;
+      font-weight: 700;
+      letter-spacing:.2px;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px);border-color: rgba(255,255,255,.22);background: rgba(255,255,255,.10);}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{background: linear-gradient(135deg, rgba(140,100,255,.45), rgba(0,220,255,.22));border-color: rgba(140,100,255,.45);box-shadow: 0 18px 40px rgba(140,100,255,.12);}
+    .btn.danger{background: rgba(255,80,120,.12);border-color: rgba(255,80,120,.30);}
+    .tiny{font-size: 12px;color: var(--muted);line-height: 1.45;}
+    .preview{padding: 0 16px 16px;display:grid;gap: 12px;}
+    .previewbox{
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      border-radius: 16px;
+      padding: 14px 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 88px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .outputs{padding: 14px 16px 18px;border-top: 1px solid rgba(255,255,255,.10);display:grid;gap: 10px;}
+    .outhead{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .count{color: var(--muted);font-size: 12px;font-family: var(--mono);}
+    .list{display:grid;gap: 10px;max-height: 62vh;overflow:auto;padding-right: 6px;}
+    .item{border: 1px solid rgba(255,255,255,.12);background: rgba(255,255,255,.04);border-radius: 16px;padding: 12px;display:grid;gap: 10px;}
+    .itemtop{display:flex;gap:10px;align-items:center;justify-content:space-between;}
+    .badge{font-size: 11px;color: rgba(255,255,255,.75);background: rgba(255,255,255,.06);border: 1px solid rgba(255,255,255,.12);padding: 5px 9px;border-radius: 999px;font-family: var(--mono);}
+    .line{white-space: pre-wrap;word-break: break-word;font-size: 15px;line-height: 1.55;}
+    .tog{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      padding: 10px 12px;border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18); border-radius: 14px;
+    }
+    .tog input{transform: scale(1.05);}
+    .toast{
+      position: fixed;left: 50%;bottom: 18px;transform: translateX(-50%);
+      background: rgba(0,0,0,.70);border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.90);padding: 10px 12px;border-radius: 999px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.55);backdrop-filter: blur(10px);
+      opacity: 0;pointer-events:none;transition: .22s ease;font-size: 13px;
+    }
+    .toast.show{opacity:1; bottom: 24px}
+    .footer{margin-top: 16px;color: rgba(255,255,255,.50);font-size: 12px;text-align:center;}
+    .seg{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-start;
+      padding: 10px;border: 1px solid rgba(255,255,255,.12);border-radius: 14px;
+      background: rgba(0,0,0,.18);
+    }
+    .seg button{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.9);
+      padding: 9px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 750;
+    }
+    .seg button.active{
+      background: linear-gradient(135deg, rgba(140,100,255,.38), rgba(0,220,255,.18));
+      border-color: rgba(140,100,255,.45);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <div class="title">⚡ Ultra Stylish Fonts Website</div>
+        <div class="subtitle">
+          Now with <b>more unique styles</b> + <b>paragraph auto-detect</b> for long group descriptions.
+          Links, @mentions, #tags, numbers & emojis stay safe.
+        </div>
+      </div>
+      <div class="pillrow">
+        <div class="pill">Name Mode + Paragraph Mode</div>
+        <div class="pill">Smart Detect / Safe Convert</div>
+        <div class="pill">Copy / Download</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <div class="cardhead">
+          <div class="cardtitle"><span class="dot"></span> Generator</div>
+          <div class="count" id="statusText">Ready</div>
+        </div>
+
+        <div class="controls">
+          <div class="seg">
+            <button id="modeName" class="active">✨ Name / Lines</button>
+            <button id="modePara">📝 Paragraph</button>
+          </div>
+
+          <div id="nameModeBlock" class="row">
+            <label>Text (for stylish lines)</label>
+            <input class="input" id="textInput" placeholder="Type here… e.g. hii / Nasir Hacker" maxlength="140" />
+          </div>
+
+          <div id="paraModeBlock" class="row" style="display:none;">
+            <label>
+              Group Description / Long Paragraph
+              <span class="tiny">Auto-detect words only</span>
+            </label>
+            <textarea class="ta" id="paraInput" placeholder="Paste your long group description here…"></textarea>
+
+            <div class="tog">
+              <input type="checkbox" id="wrapBullets" checked />
+              <label for="wrapBullets" style="margin:0;justify-content:flex-start;gap:8px;">
+                Add stylish bullets / headers automatically
+              </label>
+            </div>
+
+            <div class="tiny">
+              Safe mode rules:
+              <span style="font-family:var(--mono)">URLs</span>,
+              <span style="font-family:var(--mono)">@mentions</span>,
+              <span style="font-family:var(--mono)">#tags</span>,
+              <span style="font-family:var(--mono)">numbers</span> stay unchanged.
+            </div>
+          </div>
+
+          <div class="twocol">
+            <div class="row">
+              <label>Style search (filter)</label>
+              <input class="input" id="styleSearch" placeholder="Search in prefixes/suffixes…" />
+            </div>
+            <div class="row">
+              <label>Limit results</label>
+              <select class="input" id="limitSelect">
+                <option value="0">Show all</option>
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="36">36</option>
+                <option value="60">60</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Added: Custom symbols input -->
+          <div class="row">
+            <label>
+              Add custom symbols (one per line)
+              <span class="tiny">adds as extra styles</span>
+            </label>
+            <textarea class="ta" id="customSymbols" placeholder="Paste symbols here… (one per line)"></textarea>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn primary" id="generateBtn">⚡ Generate</button>
+            <button class="btn" id="randomBtn">🎲 Random One</button>
+            <button class="btn" id="copyAllBtn">📋 Copy All</button>
+            <button class="btn" id="downloadBtn">⬇️ Download .txt</button>
+            <button class="btn" id="importEmojiBtn">🌐 Import EmojiDB (Style Emojis)</button>
+            <button class="btn danger" id="clearBtn">🧹 Clear</button>
+          </div>
+
+          <div class="tiny">
+            <span style="font-family:var(--mono)">Name mode:</span> pre + convert(text) + suf <br/>
+            <span style="font-family:var(--mono)">Paragraph mode:</span> smartConvert(paragraph) + optional stylish blocks
+          </div>
+        </div>
+
+        <div class="preview">
+          <div class="cardtitle" style="font-size:13px; opacity:.9;">Live preview</div>
+          <div class="previewbox" id="previewBox">—</div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="cardhead">
+          <div class="cardtitle"><span class="dot"></span> Results</div>
+          <div class="count" id="resultCount">0</div>
+        </div>
+
+        <div class="outputs">
+          <div class="outhead">
+            <div class="tiny" id="hintText">Generate to see results here.</div>
+            <div class="count" id="filteredInfo"></div>
+          </div>
+
+          <div class="list" id="list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Offline • Safe convert for long descriptions • Extra unique styles included</div>
+  </div>
+
+  <div class="toast" id="toast">Copied ✅</div>
+
+  <script>
+    // ===== Your FONT_MAP + convert() =====
+    const FONT_MAP = {
+      "a":"ᴧ","b":"ʙ","c":"ᴄ","d":"ᴅ","e":"є","f":"ғ","g":"ɢ","h":"ʜ","i":"ɪ",
+      "j":"ᴊ","k":"ᴋ","l":"ʟ","m":"ϻ","n":"η","o":"σ","p":"ᴘ","q":"ǫ","r":"ꝛ",
+      "s":"s","t":"ᴛ","u":"υ","v":"ᴠ","w":"ᴡ","x":"x","y":"ʏ","z":"ᴢ",
+      "A":"𝐀‌","B":"𝐁‌","C":"𝐂‌","D":"𝐃‌","E":"𝐄‌","F":"𝐅‌","G":"𝐆‌",
+      "H":"𝐇‌","I":"𝐈‌","J":"𝐉‌","K":"𝐊‌","L":"𝐋‌","M":"𝐌‌","N":"𝐍‌",
+      "O":"𝐎‌","P":"𝐏‌","Q":"𝐐‌","R":"𝐑‌","S":"𝐒‌","T":"𝐓‌","U":"𝐔‌",
+      "V":"𝐕‌","W":"𝐖‌","X":"𝐗‌","Y":"𝐘‌","Z":"𝐙‌",
+    };
+    function convert(text){
+      return Array.from(text).map(ch => (FONT_MAP[ch] ?? ch)).join("");
+    }
+
+    // ===== ORIGINAL STYLES (kept) =====
+    const STYLES_ORIGINAL = [
+      ["𓂃❛ ⟶", "❜ 🌙⤹🌸"],
+      ["❍⏤●", "●───♫▷"],
+      ["🤍 ⍣⃪ ᶦ ᵃᵐ⛦⃕", "❛𝆺𝅥⤹࿗𓆪ꪾ™"],
+      ["𓆰𝅃🔥", "⃪⍣꯭꯭𓆪꯭🝐"],
+      ["◄❥❥⃝⃪⃕🦚⟵᷽᷍", "˚◡⃝🐬᪳𔘓❁❍•:➛"],
+      ["➺꯭꯭꯭𝅥𝆬🦋⃪꯭─⃛┼", "🥵⃝⃝ᬽ⃪꯭꯭➺꯭⎯⎯᪵᪳"],
+      ["◄⏤🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ🥀⃝⃪", "⃝☠⎯꯭𓆩♡꧂"],
+      ["🦋⃟≛⃝⋆⋆≛⃞", "𝄟🦋⃟≛⃝≛"],
+      ["𐏓𓆩❤🔥𓆪𝆺꯭𝅥༎ࠫ⛧", "ࠫ༎𝆺𝅥𓆩⍣꯭⃟🍷༎᪵⛧"],
+      ["𓄂𝆺𝅥⃝🥀⃪⃪꯭ᷟ⃜𖥫꯭꯭꯭𝆺꯭꯭𝅥", "𝆺꯭𝅥🎭🌹꯭"],
+      ["𓄂─⃛𓆩🫧𝆺𝅥⃝𐏓", "㋛𓆪꯭⵿٭🍃"],
+      ["◄⏤⃪⃝⃪𐏓🝛꯭", "⸙ꠋꠋꠋꠋꠋ⛦⃪⃪🝛꯭••➤"],
+      ["🎡𓆩᪵🌸⃝۫𝞄⃕𝖋𝖋꯭ᜊ𝆺𝅥⃝", "┼⃖ꭗ🦋¦🌺--🎋"],
+      ["⛦⃕𝄟•๋๋๋๋๋๋๋๋๋๋๋๋๋๋🦋⃟⃟⃟≛⃝💖", "🦋•๋๋๋๋๋๋๋๋๋๋๋๋๋๋𝄟"],
+      ["••ᯓ❥๋๋๋๋๋๋๋๋๋๋๋๋ꗝ༎꯭ࠫ🤍𝆺꯭𝅥", "𝆺꯭𝅥༎ࠫ◡⃝𑲭"],
+      ["𝐈𝛕ᷟ𝚣⃪ꙴ⋆†།┼⃖•🔥⃞⃪⃜", "🔥⃞⃪⃜𓆪🦋✿"],
+      ["❍─⃜𓆩〭⃛〬🤍𓆪˹", ".⍣⃪ꭗ𝆺𝅥𔘓🪽"],
+      ["𝆺𝅥اـ꯭ـ꯭𝞂⃕𝝲𝝴꯭•⚚•𝆺꯭𝅥", "𝆺꯭𝅥ꀭ‧₊𝁾⟶🍃˚"],
+      ["◄⏤🔥⃝⃪🐼𓆩꯭❛", "❜꯭𓆪⎯⟶"],
+      ["❍─⃜𓆩〭⃛〬👒𓆪⃪꯭", "🤍᪳𝆺꯭𝅥⎯⎯"],
+      ["◄⏤❥≛⃝", "🍁⃝➤🕊⃝🝐"],
+      ["°ꗝؖ༎꯭ࠫᜊ𝆺꯭𝅥🔥⃝❥༎ࠫ𝆺꯭𝅥", "༎ࠫ٭⃪꯭꯭⃜꯬👅"],
+      ["◄⏤🫧⃝⃪🦋꯭", "◡⃝ا۬🌸᪳𝆺꯭𝅥⎯꯭"],
+      ["◄ᯓ❥≛⃝🌸꯭", "💗⃝꯭꯭❥꯭꯭✿꯭꯭࿐"],
+      ["❝ .𝁘ໍ ", "🍷𐏓𝟑 ༗ آ‌⃖𝄤𝅃"],
+      ["𓍼 ໋݊ ", " ⌯ ™| 💗"],
+      ["𝄟🦋⃟≛⃝ ", "🦋⃟❤"],
+      ["ᯓ𓆰 𝅃꯭꯭꯭꯭꯭❛-", "-֟፝…𓆪᭄ꪾ"],
+      ["⛦⃕𝄟•๋๋๋๋๋๋🦋⃟⃟⃟≛⃝💖", "🦋•๋๋๋๋๋๋𝄟⛦⃕"],
+      ["𓆩🔥⃝⃪❥༎꯭ࠫ", "꯭༎ࠫ❥⃪⃝🔥𓆪"],
+      ["𓆩🧿⃝🦋⃪⛦⃕", "⛦⃪⃕🦋⃝🧿𓆪"],
+      ["𓆩💀⃝🖤⃪☠", "☠⃪🖤⃝💀𓆪"],
+      ["⛧⃝🔥⃪𓆩👑", "👑𓆪⃪🔥⃝⛧"],
+      ["𓂀⃝🦋⃪⛦⃕💫", "💫⃕⛦⃪🦋⃝𓂀"],
+      ["◄⏤🎭⃝⃪𓆩", "𓆪⃪⃝🎭⏤►"],
+      ["𓆩⚡⃝🔥⃪💥", "💥⃪🔥⃝⚡𓆪"],
+      ["✦⃝💫⃪𓆩🌌", "🌌𓆪⃪💫⃝✦"],
+      ["𓆩🍷⃝✨⃪⛧", "⛧⃪✨⃝🍷𓆪"],
+      ["❛⃝🌑⃪𓆩☠", "☠𓆪⃪🌑⃝❜"],
+      ["◄ᯓ🖤⃝⃪💀", "💀⃪⃝🖤ᯓ►"],
+      ["𓆩🎀⃝💖⃪⛦", "⛦⃪💖⃝🎀𓆪"],
+      ["✧⃝🌺⃪𓆩🦋", "🦋𓆪⃪🌺⃝✧"],
+      ["𓆩🔥⃝⚔⃪👑", "👑⃪⚔⃝🔥𓆪"],
+      ["◄⏤🌪⃝⃪💫", "💫⃪⃝🌪⏤►"],
+      ["𓆩🕯⃝🌑⃪☠", "☠⃪🌑⃝🕯𓆪"],
+      ["⛦⃕⃝🔥⃪𓆩💎", "💎𓆪⃪🔥⃝⛦⃕"],
+    ];
+
+    // ===== EXTRA UNIQUE STYLES (added) =====
+    const STYLES_EXTRA = [
+      ["╭─❰✨❱ ", " ❱✨❰─╮"],
+      ["⟦🌙 ", " 🌙⟧"],
+      ["⟪⚡ ", " ⚡⟫"],
+      ["『🖤 ", " 🖤』"],
+      ["《🎭 ", " 🎭》"],
+      ["⟮🕊️ ", " 🕊️⟯"],
+      ["✦⟬ ", " ⟭✦"],
+      ["⛧⟬ ", " ⟭⛧"],
+      ["❖⟬ ", " ⟭❖"],
+      ["⟡⟬ ", " ⟭⟡"],
+      ["⎯⎯🌸 ", " 🌸⎯⎯"],
+      ["⎯⎯🦋 ", " 🦋⎯⎯"],
+      ["༺🌺 ", " 🌺༻"],
+      ["༺🔥 ", " 🔥༻"],
+      ["༺💫 ", " 💫༻"],
+      ["⟦☠ ", " ☠⟧"],
+      ["⟦👑 ", " 👑⟧"],
+      ["⟦💎 ", " 💎⟧"],
+      ["⌁❛ ", " ❜⌁"],
+      ["⟅⟆ ", " ⟅⟆"],
+      ["⟮✧ ", " ✧⟯"],
+      ["⟮✿ ", " ✿⟯"],
+      ["⟮❀ ", " ❀⟯"],
+      ["⟬☆ ", " ☆⟭"],
+      ["⟬★ ", " ★⟭"],
+      ["•⟬ ", " ⟭•"],
+      ["✧• ", " •✧"],
+      ["✦• ", " •✦"],
+      ["☾⋆ ", " ⋆☽"],
+      ["✧₊˚ ", " ˚₊✧"],
+      ["⟪𓆩 ", " 𓆪⟫"],
+      ["𓆩⟬ ", " ⟭𓆪"],
+      ["╰─➤ ", ""],
+      ["➤ ", " ◁"],
+      ["⟶ ", " ⟵"],
+      ["⟵ ", " ⟶"],
+      ["⌜ ", " ⌟"],
+      ["⌞ ", " ⌝"],
+      ["【 ", " 】"],
+      ["〔 ", " 〕"],
+      ["⫷ ", " ⫸"],
+      ["⤷ ", ""],
+      ["✘ ", " ✘"],
+      ["✓ ", " ✓"],
+      ["⚜ ", " ⚜"],
+      ["♛ ", " ♛"],
+      ["♜ ", " ♜"],
+      ["♆ ", " ♆"],
+      ["⌬ ", " ⌬"],
+      ["⎔ ", " ⎔"],
+      ["✪ ", " ✪"],
+      ["꧁ ", " ꧂"],
+      ["꧁༺ ", " ༻꧂"],
+      ["༒ ", " ༒"],
+      ["⟦༎ࠫ ", " ༎ࠫ⟧"],
+      ["⟦𐏓 ", " 𐏓⟧"],
+      ["⟦𝆺꯭𝅥 ", " 𝆺꯭𝅥⟧"],
+      ["⟦⋆† ", " ⋆†⟧"],
+      ["⟦🪽 ", " 🪽⟧"],
+      ["⟦🍃 ", " 🍃⟧"],
+    ];
+
+    // ===== Your requested symbols (added) =====
+    const REQUESTED_SYMBOLS = [
+      "🖤⃝🦋𓍯𓂃𓏧♡🫵🏻🫶🏻",
+      "🍁⃝⃪⃨⃡ ❥𝑳𝒐𝒗𝒆 ♛✰",
+      "🦋⃟💗᪲᪲᪲",
+      "ᥫ᭡.ִֶָ𓂃",
+      "➳ 🦋⃝🐼➳"
+    ];
+    const STYLES_REQUESTED_SYMBOLS = [
+      ...REQUESTED_SYMBOLS.map(s => [s + " ", ""]),
+      ...REQUESTED_SYMBOLS.map(s => ["", " " + s])
+    ];
+
+    // Merge + de-duplicate styles
+    const styleKey = (s) => s[0] + "||" + s[1];
+    let STYLES = Array.from(
+      new Map([...STYLES_ORIGINAL, ...STYLES_EXTRA, ...STYLES_REQUESTED_SYMBOLS].map(s => [styleKey(s), s])).values()
+    );
+
+    // ===== Paragraph Smart Convert =====
+    const URL_RE = /\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+/gi;
+    const MENTION_RE = /(^|[\s])[@#][\w_]+/g; // simple @name / #tag
+    const INLINE_CODE_RE = /`[^`]+`/g;
+
+    function isNumericToken(tok){
+      return /^[0-9]+([.,][0-9]+)*$/.test(tok);
+    }
+
+    function smartConvertParagraph(input){
+      const keep = [];
+      function protect(regex){
+        input = input.replace(regex, (m) => {
+          const i = keep.push(m) - 1;
+          return `\uE000${i}\uE001`;
+        });
+      }
+
+      protect(INLINE_CODE_RE);
+      protect(URL_RE);
+
+      input = input.replace(MENTION_RE, (m) => {
+        const i = keep.push(m) - 1;
+        return `\uE000${i}\uE001`;
+      });
+
+      const parts = input.split(/(\s+)/);
+      const converted = parts.map(p => {
+        if(/^\s+$/.test(p)) return p;
+        if(p.includes("\uE000") && p.includes("\uE001")) return p;
+        if(isNumericToken(p)) return p;
+        return convert(p);
+      }).join("");
+
+      return converted.replace(/\uE000(\d+)\uE001/g, (_, n) => keep[Number(n)] ?? "");
+    }
+
+    function autoStyleDescription(desc, style){
+      const [pre, suf] = style;
+      const safe = smartConvertParagraph(desc);
+
+      if(!document.getElementById("wrapBullets").checked){
+        return `${pre}${safe}${suf}`;
+      }
+
+      const lines = safe.split(/\r?\n/);
+      const nonEmpty = lines.filter(l => l.trim().length);
+
+      if(nonEmpty.length <= 1){
+        return `${pre}${safe}${suf}`;
+      }
+
+      const header = `${pre}𝐆ʀᴏᴜᴘ 𝐃ᴇsᴄʀɪᴘᴛɪᴏɴ${suf}`;
+      const body = lines.map(l => {
+        if(!l.trim()) return "";
+        const trimmed = l.trim();
+        const startsBullet = /^[•\-–—➤»›⭐✨🔥⚡🌸🦋✅✓]/.test(trimmed);
+        return (startsBullet ? trimmed : `• ${trimmed}`);
+      }).join("\n");
+
+      return `${header}\n\n${body}`;
+    }
+
+    // ===== UI =====
+    const $ = (id) => document.getElementById(id);
+
+    const modeNameBtn = $("modeName");
+    const modeParaBtn = $("modePara");
+    const nameModeBlock = $("nameModeBlock");
+    const paraModeBlock = $("paraModeBlock");
+
+    const textInput = $("textInput");
+    const paraInput = $("paraInput");
+    const styleSearch = $("styleSearch");
+    const limitSelect = $("limitSelect");
+    const previewBox = $("previewBox");
+    const list = $("list");
+    const toast = $("toast");
+    const resultCount = $("resultCount");
+    const filteredInfo = $("filteredInfo");
+    const statusText = $("statusText");
+    const hintText = $("hintText");
+
+    const customSymbols = $("customSymbols");
+    const importEmojiBtn = $("importEmojiBtn");
+
+    let currentMode = "name";
+    let lastLines = [];
+
+    function showToast(msg="Copied ✅"){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"), 1100);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied ✅");
+      }catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        showToast("Copied ✅");
+      }
+    }
+
+    function addCustomSymbolsToStyles(){
+      const raw = (customSymbols.value || "").trim();
+      if(!raw) return;
+
+      const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+      const extra = [
+        ...lines.map(s => [s + " ", ""]),
+        ...lines.map(s => ["", " " + s]),
+        ...lines.map(s => ["⟦" + s + " ", " " + s + "⟧"]),
+      ];
+
+      STYLES = Array.from(
+        new Map([...STYLES, ...extra].map(s => [styleKey(s), s])).values()
+      );
+    }
+
+    function filteredStyles(){
+      addCustomSymbolsToStyles();
+
+      const q = (styleSearch.value || "").trim().toLowerCase();
+      let styles = STYLES;
+
+      if(q){
+        styles = styles.filter(([pre,suf]) =>
+          (pre + " " + suf).toLowerCase().includes(q)
+        );
+      }
+
+      const lim = Number(limitSelect.value || 0);
+      if(lim > 0) styles = styles.slice(0, lim);
+      return styles;
+    }
+
+    function render(lines, meta){
+      list.innerHTML = "";
+      lastLines = lines;
+
+      resultCount.textContent = `${lines.length} result(s)`;
+      filteredInfo.textContent = meta;
+      hintText.textContent = lines.length ? "Tap any card to copy. Use Copy All / Download." : "Generate to see results here.";
+
+      if(!lines.length){
+        const empty = document.createElement("div");
+        empty.className = "tiny";
+        empty.textContent = "No results. Try different text or clear the style search.";
+        list.appendChild(empty);
+        return;
+      }
+
+      lines.forEach((line, idx) => {
+        const item = document.createElement("div");
+        item.className = "item";
+
+        const top = document.createElement("div");
+        top.className = "itemtop";
+
+        const badge = document.createElement("div");
+        badge.className = "badge";
+        badge.textContent = `#${idx+1}`;
+
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.textContent = "📋 Copy";
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          copyText(line);
+        });
+
+        top.appendChild(badge);
+        top.appendChild(btn);
+
+        const text = document.createElement("div");
+        text.className = "line";
+        text.textContent = line;
+
+        item.appendChild(top);
+        item.appendChild(text);
+
+        item.addEventListener("click", () => copyText(line));
+        list.appendChild(item);
+      });
+    }
+
+    function generate(){
+      const styles = filteredStyles();
+      const q = (styleSearch.value || "").trim();
+      const lim = Number(limitSelect.value || 0);
+      const meta = `${q ? `filtered “${q}” • ` : ""}${lim ? `limit ${lim} • ` : ""}total styles ${STYLES.length}`;
+
+      if(currentMode === "name"){
+        const raw = (textInput.value || "").trim();
+        if(!raw){
+          statusText.textContent = "Enter text…";
+          previewBox.textContent = "—";
+          render([], meta);
+          return;
+        }
+        const converted = convert(raw);
+        previewBox.textContent = converted;
+
+        const lines = styles.map(([pre, suf]) => `${pre}${converted}${suf}`);
+        statusText.textContent = "Generated ✅";
+        render(lines, meta);
+      } else {
+        const raw = (paraInput.value || "").trim();
+        if(!raw){
+          statusText.textContent = "Paste description…";
+          previewBox.textContent = "—";
+          render([], meta);
+          return;
+        }
+
+        previewBox.textContent = smartConvertParagraph(raw);
+
+        const lines = styles.map((style) => autoStyleDescription(raw, style));
+        statusText.textContent = "Styled paragraph ✅";
+        render(lines, meta);
+      }
+    }
+
+    function randomOne(){
+      const styles = filteredStyles();
+      if(!styles.length){
+        statusText.textContent = "No styles in filter";
+        return;
+      }
+      const pick = styles[Math.floor(Math.random() * styles.length)];
+
+      if(currentMode === "name"){
+        const raw = (textInput.value || "").trim();
+        if(!raw){ statusText.textContent = "Enter text first"; return; }
+        const converted = convert(raw);
+        const line = `${pick[0]}${converted}${pick[1]}`;
+        copyText(line);
+        showToast("Random copied 🎲");
+      } else {
+        const raw = (paraInput.value || "").trim();
+        if(!raw){ statusText.textContent = "Paste description first"; return; }
+        const line = autoStyleDescription(raw, pick);
+        copyText(line);
+        showToast("Random paragraph copied 🎲");
+      }
+    }
+
+    function copyAll(){
+      if(!lastLines.length){
+        statusText.textContent = "Nothing to copy";
+        return;
+      }
+      copyText(lastLines.join("\n\n"));
+      showToast("All copied ✅");
+    }
+
+    function downloadTxt(){
+      if(!lastLines.length){
+        statusText.textContent = "Nothing to download";
+        return;
+      }
+      const blob = new Blob([lastLines.join("\n\n")], {type:"text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = currentMode === "name" ? "stylish-lines.txt" : "stylish-description.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast("Downloaded ⬇️");
+    }
+
+    function clearAll(){
+      textInput.value = "";
+      paraInput.value = "";
+      styleSearch.value = "";
+      limitSelect.value = "0";
+      customSymbols.value = "";
+      previewBox.textContent = "—";
+      statusText.textContent = "Ready";
+      render([], "");
+    }
+
+    function setMode(mode){
+      currentMode = mode;
+      if(mode === "name"){
+        modeNameBtn.classList.add("active");
+        modeParaBtn.classList.remove("active");
+        nameModeBlock.style.display = "";
+        paraModeBlock.style.display = "none";
+        previewBox.textContent = (textInput.value.trim() ? convert(textInput.value.trim()) : "—");
+      }else{
+        modeParaBtn.classList.add("active");
+        modeNameBtn.classList.remove("active");
+        paraModeBlock.style.display = "";
+        nameModeBlock.style.display = "none";
+        previewBox.textContent = (paraInput.value.trim() ? smartConvertParagraph(paraInput.value.trim()) : "—");
+      }
+      generate();
+    }
+
+    // ===== FINAL FIX: Import ONLY emoji/symbol combos from EmojiDB (NO HTML/CSS/JS EVER) =====
+    async function importEmojiDBStyleEmojis(){
+      statusText.textContent = "Importing EmojiDB…";
+      try{
+        const url = "https://emojidb.org/style-emojis";
+        const res = await fetch(url, { mode: "cors" });
+        if(!res.ok) throw new Error("Fetch failed: " + res.status);
+
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+
+        // ✅ HARD BLOCK: if it has ANY English letters -> reject (prevents gtag/window/try/etc)
+        const HAS_LATIN = /[A-Za-z]/;
+
+        // ✅ HARD BLOCK: common code/url chars
+        const HAS_CODE_CHARS = /[{}()[\];=<>\\/._'"`]|:\/\/|www\./;
+
+        function isEmojiCombo(s){
+          s = (s || "").trim();
+          if(!s) return false;
+
+          // reject long junk
+          if(s.length > 80) return false;
+
+          // reject any english letters or code chars
+          if(HAS_LATIN.test(s)) return false;
+          if(HAS_CODE_CHARS.test(s)) return false;
+
+          // must contain non-ascii characters
+          const hasNonAscii = /[^\x00-\x7F]/.test(s);
+          if(!hasNonAscii) return false;
+
+          // if unicode property supported, prefer actual emoji pictographs
+          try{
+            if(!/[\p{Extended_Pictographic}]/u.test(s)) {
+              // allow decorative symbol-only combos, but reject noisy punctuation
+              if(/[!@#$%^&*+=|~]/.test(s)) return false;
+            }
+          }catch(e){
+            // fallback already checked non-ascii
+          }
+
+          const core = s.replace(/\s+/g, "");
+          if(core.length < 1) return false;
+          return /[^\x00-\x7F]/.test(core);
+        }
+
+        const picked = new Set();
+
+        // ✅ ONLY read copy/emoji attributes (NO reading doc.body.textContent, NO random text fallback)
+        const nodes = doc.querySelectorAll("[data-clipboard-text],[data-emoji],[data-copy],[data-clipboard]");
+        nodes.forEach(el => {
+          const v =
+            el.getAttribute("data-clipboard-text") ||
+            el.getAttribute("data-emoji") ||
+            el.getAttribute("data-copy") ||
+            el.getAttribute("data-clipboard") ||
+            "";
+
+          String(v).split(/\r?\n/).forEach(line => {
+            const s = line.trim();
+            if(isEmojiCombo(s)) picked.add(s);
+          });
+        });
+
+        const uniq = Array.from(picked);
+
+        if(!uniq.length){
+          statusText.textContent = "No emojis found (blocked / page changed).";
+          showToast("No emojis found ❌");
+          window.open("https://emojidb.org/style-emojis", "_blank");
+          return;
+        }
+
+        const importedStyles = [
+          ...uniq.map(s => [s + " ", ""]),
+          ...uniq.map(s => ["", " " + s]),
+          ...uniq.map(s => ["⟦" + s + " ", " " + s + "⟧"]),
+        ];
+
+        STYLES = Array.from(
+          new Map([...STYLES, ...importedStyles].map(s => [styleKey(s), s])).values()
+        );
+
+        statusText.textContent = `Imported ✅ (${uniq.length})`;
+        showToast(`Imported ✅ ${uniq.length}`);
+        generate();
+      }catch(err){
+        statusText.textContent = "Import blocked (CORS). Opened site.";
+        window.open("https://emojidb.org/style-emojis", "_blank");
+        showToast("Opened EmojiDB 🌐");
+      }
+    }
+
+    // Events
+    $("generateBtn").addEventListener("click", generate);
+    $("randomBtn").addEventListener("click", randomOne);
+    $("copyAllBtn").addEventListener("click", copyAll);
+    $("downloadBtn").addEventListener("click", downloadTxt);
+    $("clearBtn").addEventListener("click", clearAll);
+
+    importEmojiBtn.addEventListener("click", importEmojiDBStyleEmojis);
+
+    modeNameBtn.addEventListener("click", ()=> setMode("name"));
+    modeParaBtn.addEventListener("click", ()=> setMode("para"));
+
+    textInput.addEventListener("input", () => {
+      if(currentMode !== "name") return;
+      previewBox.textContent = textInput.value.trim() ? convert(textInput.value.trim()) : "—";
+      statusText.textContent = "Typing…";
+      if(lastLines.length) generate();
+    });
+
+    paraInput.addEventListener("input", () => {
+      if(currentMode !== "para") return;
+      previewBox.textContent = paraInput.value.trim() ? smartConvertParagraph(paraInput.value.trim()) : "—";
+      statusText.textContent = "Editing…";
+      if(lastLines.length) generate();
+    });
+
+    styleSearch.addEventListener("input", () => {
+      if((currentMode==="name" && textInput.value.trim()) || (currentMode==="para" && paraInput.value.trim())) generate();
+    });
+
+    limitSelect.addEventListener("change", () => {
+      if((currentMode==="name" && textInput.value.trim()) || (currentMode==="para" && paraInput.value.trim())) generate();
+    });
+
+    $("wrapBullets").addEventListener("change", () => {
+      if(currentMode==="para" && paraInput.value.trim()) generate();
+    });
+
+    customSymbols.addEventListener("input", () => {
+      if((currentMode==="name" && textInput.value.trim()) || (currentMode==="para" && paraInput.value.trim())) generate();
+    });
+
+    // First render
+    render([], "");
+  </script>
+</body>
+</html>
