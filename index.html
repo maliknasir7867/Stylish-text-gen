@@ -772,7 +772,7 @@
       const styles = filteredStyles();
       const q = (styleSearch.value || "").trim();
       const lim = Number(limitSelect.value || 0);
-      const meta = `${q ? `filtered “${q}” • ` : ""}${lim ? `limit ${lim} • ` : ""}total styles ${STYLES.length}`;
+      const meta = `${q ? `filtered " ${q}" • ` : ""}${lim ? `limit ${lim} • ` : ""}total styles ${STYLES.length}`;
 
       if(currentMode === "name"){
         const raw = (textInput.value || "").trim();
@@ -884,6 +884,10 @@
       generate();
     }
 
+    // ===== FIXED: Event Listeners for mode switching =====
+    modeNameBtn.addEventListener("click", () => setMode("name"));
+    modeParaBtn.addEventListener("click", () => setMode("para"));
+
     // ===== FINAL FIX: Import ONLY emoji/symbol combos from EmojiDB (NO HTML/CSS/JS EVER) =====
     async function importEmojiDBStyleEmojis(){
       statusText.textContent = "Importing EmojiDB…";
@@ -984,11 +988,6 @@
     $("copyAllBtn").addEventListener("click", copyAll);
     $("downloadBtn").addEventListener("click", downloadTxt);
     $("clearBtn").addEventListener("click", clearAll);
-
-    importEmojiBtn.addEventListener("click", importEmojiDBStyleEmojis);
-
-    modeNameBtn.addEventListener("click", ()=> setMode("name"));
-    modeParaBtn.addEventListener("click", ()=> setMode("para"));
 
     textInput.addEventListener("input", () => {
       if(currentMode !== "name") return;
